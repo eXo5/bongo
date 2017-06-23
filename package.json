@@ -1,0 +1,27 @@
+{
+  "name": "bongo",
+  "version": "1.0.0",
+  "description": "Bongo is a CLI application intended to provide users with a means to search for and submit purchase orders.",
+  "main": "bongoCustomerj.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eXo5/bongo.git"
+  },
+  "keywords": [
+    "bamazon"
+  ],
+  "author": "Michael YIngling",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/eXo5/bongo/issues"
+  },
+  "homepage": "https://github.com/eXo5/bongo#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "inquirer": "^3.1.1",
+    "mysql": "^2.13.0"
+  }
+}
