@@ -82,7 +82,7 @@ function orderProduct(res){
       id = res[0].item_id;
     if (err) throw err;
     }); 
-     setTimeout(x,1000);//This will break at 2ms(yes I tested it), I gave 25ms for good measure.
+     setTimeout(x,25);//This will break at 2ms(yes I tested it), I gave 25ms for good measure.
     
 
     inquirer.prompt([
@@ -93,11 +93,12 @@ function orderProduct(res){
       }]).then(function(answers){
        // connection.query("UPDATE products SET ? WHERE ?"), [{}]
        var orderQuant = parseFloat(answers.number); 
+
        if (purchaseQuant > orderQuant){
-       console.log(purchaseQuant - order);
+       //console.log(purchaseQuant - order);
        connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = '?'", [purchaseQuant-answers.number, id], function(err,res){
         if (err) throw err;
-        console.log("res"  + res);
+        
 
        });
      }//end if (stock > order)
