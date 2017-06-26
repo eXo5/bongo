@@ -11,10 +11,24 @@ var id;
 var productName;
 var updateValue;
 var purchaseQuant;
+var order;
 
+ function x(){ connection.query("SELECT stock_quantity FROM products WHERE item_id = " + id +";", function(err, res){
+      if (err) throw err;
+      purchaseQuant = parseFloat(res[0].stock_quantity);
+      //console.log(typeof purchaseQuant, purchaseQuant); 
+      });
+
+ };
 connection.connect(function(err) {//initial DB  connection
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
+
+
+
+
+
+
 
   connection.query("SELECT * FROM products",
 
@@ -64,38 +78,49 @@ function orderProduct(res){
     //console.log(res.product_name, res.stock_quantity);
     productName = answers.item;
     connection.query("SELECT item_id FROM products WHERE product_name = ?", productName, function(err, res) {
-      console.log(res[0].item_id);
+      //console.log(res[0].item_id);
       id = res[0].item_id;
     if (err) throw err;
     }); 
-    function x(){ connection.query("SELECT stock_quantity FROM products WHERE item_id = " + id +";", function(err, res){
-      purchaseQuant = parseFloat(res[0].stock_quantity);
-      console.log(purchaseQuant); 
-    });
-    }
-    setTimeout(x,25);//This will break at 2ms(yes I tested it), I gave 25ms for good measure.
+     setTimeout(x,1000);//This will break at 2ms(yes I tested it), I gave 25ms for good measure.
+    
+
     inquirer.prompt([
       {
         name: "number",
         type: "input",
-        message:"How many " + answers.item + "s would you like?"
+        message:"\nHow many " + answers.item + "s would you like?"
       }]).then(function(answers){
        // connection.query("UPDATE products SET ? WHERE ?"), [{}]
-       console.log(purchaseQuant - parseFloat(answers.number));
-       connection.query("UPDATE stock_quantity FROM products WHERE item_id = " + id + ";",function(err,res){
+       var orderQuant = parseFloat(answers.number); 
+       if (purchaseQuant > orderQuant){
+       console.log(purchaseQuant - order);
+       connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = '?'", [purchaseQuant-answers.number, id], function(err,res){
         if (err) throw err;
-        console.log(res);
+        console.log("res"  + res);
+
        });
-       // console.log()
-      
-//       connection.query("UPDATE products SET stock_quantity = " + updateValue + " WHERE = "+ id + ";", function(err, res){ connection.query("UPDATE products SET stock_quantity = " + updateValue + " WHERE = " + id + ";", function(err, res){
-//         if (err) throw err;
-// })
-//        });//end prompt for quantity
-      });
+     }//end if (stock > order)
+     else if (purchaseQuant == orderQuant){ connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = '?'", [purchaseQuant-answers.number, id], function(err,res){
+        if (err) throw err;
+        console.log("Congratulations! You got the last " + productName + "(s) in our inventory!");
 
-    //end query
+       });
+     }  
+     else {console.log("Sorry that order exceeds our stock. We can currently only support an order size of " + purchaseQuant + " " + productName +"s");
 
-      });//end query
+     };
+      connection.query("SELECT stock_quantity from products where item_id = ?", id, function(err,res){console.log(res);})
+       connection.query("SELECT price FROM products WHERE item_id = ?", id, function(err,res){
+        var priceA = parseFloat(res[0].price);
+        order = parseFloat(orderQuant);
+        console.log((priceA*order));
+
+       console.log("Grand Total for your order will be $" + (priceA*order));
+      connection.end();
+      })//end price query
+      });//end update stockQuantity
+     
+    });//end query
 
 }
