@@ -9,4 +9,3 @@ Then Customer specifies an amount of products to order, we check to see if the s
 ![After setting order quantity](https://user-images.githubusercontent.com/22946713/27543534-6c173a92-5a58-11e7-97e4-ea4fa05e3325.png)
 
 In my opinion, this could run a whole hell of a lot better and I'm disappointed that I was only able to accomplish the first objective, especially considering how much time and effort was put into just royally screwing up javascript and sql syntax.
-![Video Link](./vid/giphy.gif)
